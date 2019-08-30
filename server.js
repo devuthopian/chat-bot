@@ -265,3 +265,7 @@ app.get(function(req, res, next) {
 http.listen(3000, function(){
     console.log('listening on *:3000');
 });
+
+app.listen(8081 || 4000, function(){
+    console.log('Your node js server is running');
+});
