@@ -1,10 +1,10 @@
 {
 	"db": {
-		"username": "root",
-		"password": "root",
+		"username": "localnmr_cloud",
+		"password": "$R&nQ.u.9M$O",
 		"host": "localhost",
 		"port": "<MongoDBPort>",
-		"name": "cloudchat"
+		"name": "localnmr_cloudchat"
 	},
 	"sessionSecret": "<RandomString>",
 	"facebook": {
