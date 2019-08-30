@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Chat Application</title>
+        <script src='chats/addEventListener.js'></script>
+        <script src='chats/CSSReload.js'></script>
+        <meta charset='UTF-8'>
+        <meta name="robots" content="noindex">
+        <link rel="shortcut icon" type="image/x-icon" href="" />
+        <link rel="mask-icon" type="" href="" color="#111" />
+        <script src="chats/jquery-3.3.1.js"></script>
+        <link rel='stylesheet prefetch' href='chats/css/reset.min.css'>
+        <link rel='stylesheet prefetch' href='chats/css/font-awesome.min.css'>
+        <!-- <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">  -->
+        <!-- <script src="vendor/bootstrap/js/bootstrap.min.js"></script>-->
+        <link rel="stylesheet" type="text/css" href="chats/css/style.css"></script>
+        <script src="chats/socket.io-2.1.0.js"></script>
+        
+        <script src="chats/chat.js"></script>
+        <script src="chats/map.js"></script>
+    </head>
+    <body>
+        <div class="container-fluid">
+            
+                <p class="lead text-center">
+                    Welcome <%= name %>
+                </p>
+                <a href="/logout" class="logout btn btn-danger"><span class="glyphicon glyphicon-log-out"></span>Logout</a>
+            <div class="row">
+                <div class="col-sm-3 col-md-6">
+                <div class="people-list" id="people-list">
+                    <div class="search">
+                        <input type="hidden" id="login-user-name" value="<%= name %>">
+                        <input type="text" placeholder="search" />
+                        <i class="fa fa-search"></i>
+                    </div>
+                    <div class="form-group">
+                        <select id="country" class="country_<%= name %> form-control" name="<%= name %>">
+                            <option>--Select language--</option>
+                        </select>
+                    </div>
+                    <ul class="list">
+                        <a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                        <span class="listhead">Channels</span>
+                    </ul>
+                    <ul class="list">
+                        <hr>
+                        <span class="listhead">Users</span>
+                    <% if(requestuser != null){ %>
+                        <% for(var i=0; i<requestuser.length; i++) { %>
+                            <% if(requestuser[i].username != name){ %>
+                            <li class="clearfix">
+                                <a href="#" class="about select" data-username="<%= requestuser[i].username %>" data-online="<%= requestuser[i].online %>">
+                                    <img src="chats/images/upload_images/<%= requestuser[i].image %>" alt="avatar" class="profile_img" />
+                                    <div class="about" id="about_<%= requestuser[i].username %>">
+                                        <% if(chatsresult != null){ %>
+                                            <% for(var j=0; j<chatsresult.length; j++) { %>
+                                                <% if(chatsresult[j].msg_from == requestuser[i].username){ %>
+                                                    <div class="icon" id="icon_<%= requestuser[i].username %>">
+                                                        <span id="notif_<%= requestuser[i].username %>" class="notif"><span id="num_<%= requestuser[i].username %>" class="countnum"><%= chatsresult[j].CountMessage %></span></span>
+                                                    </div>
+                                                <% } else{ %>
+                                                    <div class="icon" id="icon_<%= requestuser[i].username %>">
+                                                        <span id="notif_<%= requestuser[i].username %>"><span id="num_<%= requestuser[i].username %>" class="countnum"></span></span>
+                                                    </div>
+                                                <% } %>
+                                            <% } %>
+                                        <% } else{ %>
+                                            <div class="icon" id="icon_<%= requestuser[i].username %>">
+                                                <span id="notif_<%= requestuser[i].username %>"><span id="num_<%= requestuser[i].username %>" class="countnum"></span></span>
+                                            </div>
+                                        <% } %>
+                                        <div class="name"><%= requestuser[i].username %></div>
+                                        <div class="status" data-name="<%= requestuser[i].username %>">
+                                            <span id="online_username" class="<%= requestuser[i].username %>" data-online="<%= requestuser[i].online %>"></span>
+                                            <% if(requestuser[i].online == 1){ %>
+                                                <i class="fa fa-circle online"></i> online
+                                            <% } else{ %>
+                                                <i class="fa fa-circle"></i> offline
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <% } %>
+                        <% } %>
+                    <% } %>
+                    </ul>
+                </div>
+                </div>
+                <div class="col-sm-3 col-md-6">
+                <div class="chat">
+                    <div class="chat-header clearfix">
+                        <% if(image != null){ %>
+                            <img src="chats/images/upload_images/<%= image %>" alt="avatar" class="profile_img main_img"/>
+                        <% } %>
+
+                        <div class="chat-about">
+                            <div class="chat-with"></div>
+                            <div class="chat-num-messages">Online</div>
+                        </div>
+                        <i class="fa fa-star"></i>
+                    </div> <!-- end chat-header -->
+                    <div class="chat-history">
+                        <span class="response"></span>
+                        <ul id="messages" class="message_<%= name %>">
+                            <div class="WelcomeImage">
+                                <img src="chats/images/welcome.png" alt="avatar" class="welcome_img"/>
+                            </div>
+                            <!-- <li>
+                                <div class="message my-message">
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <div class="message other-message float-right">
+                                </div>
+                            </li> -->
+                        </ul>
+                    </div>
+                    <span id="notifyUser"></span>
+                    <form id="form" action="" onsubmit="return submitfunction();" > 
+                        <input type="hidden" id="user" value="" />
+                        <div class="chat-message clearfix">
+                            <textarea name="message-to-send" id="message-to-send" onkeyup="notifyTyping(name);" placeholder="Type your message" rows="3"></textarea>
+                            <button id="sendbutton" class="btn btn-success">Send</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div> 
+    </body>
+</html>
